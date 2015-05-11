@@ -109,11 +109,11 @@ var a = function(){
 				"bSort": true,
 				"columnDefs": [
 								{
-									"targets": [1,2,3,4,5],
+									"targets": [1,2,3,4,5,8],
 									"orderable": true
 								},
 								{
-									"targets": [0,6,7,8,9],
+									"targets": [0,6,7,10,9],
 									"orderable": false
 								},
 							],

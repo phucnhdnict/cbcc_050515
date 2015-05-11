@@ -24,14 +24,15 @@ class ThongkeViewThongke extends JViewLegacy {
  	$document->addScript(JUri::base(true).'/media/cbcc/js/jquery/upload/jquery.fileupload.js');
  	$document->addScript(JUri::base(true).'/media/cbcc/js/jquery.colorbox-min.js');
  	$document->addScript(JUri::base(true).'/media/cbcc/js/jquery/upload/jquery.iframe-transport.js');
- 	$document->addScript(JUri::base(true).'/media/cbcc/js/dataTables-1.10.0/jquery.dataTables.min.js');
  	$document->addScript(JUri::base(true).'/media/cbcc/js/bootstrap.tab.ajax.js');
- 	$document->addStyleSheet(JUri::base(true).'media/cbcc/js/dataTables-1.10.0/css/jquery.dataTables.min.css');
  	$document->addScript(JURI::base(true).'/media/cbcc/js/jquery/jquery.cookie.js');
  	$document->addScript(JURI::base(true).'/media/cbcc/js/jstree/jquery.jstree.js');
  	$document->addScript( JURI::base(true).'/media/cbcc/js/caydonvi.js' );
- 	$document->addScript(JUri::base(true).'/media/cbcc/js/dataTables.tableTools.min.js');
- 	$document->addStyleSheet(JUri::base(true).'/media/cbcc/js/dataTables-1.10.0/css/dataTables.tableTools.css');
+ 	$document->addScript(JURI::base(true).'/media/cbcc/js/dataTables-1.10.0/jquery.dataTables.min.js');
+ 	$document->addScript(JURI::base(true).'/media/cbcc/js/dataTables-1.10.0/dataTables.bootstrap.js');
+ 	$document->addScript(JURI::base(true).'/media/cbcc/js/dataTables-1.10.0/dataTables.tableTools.min.js');
+ 	$document->addScript(JURI::base(true).'/media/cbcc/js/dataTables-1.10.0/datatables.default.config.js');
+ 	$document->addStyleSheet(JURI::base(true).'/media/cbcc/js/dataTables-1.10.0/css/dataTables.tableTools.css');
  	
  	$model = Core::model('Thongke/Thongke');
  	$idUser = JFactory::getUser()->id;

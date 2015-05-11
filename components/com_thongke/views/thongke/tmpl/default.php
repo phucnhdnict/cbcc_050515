@@ -5,6 +5,7 @@
  * Company: DNICT
  */ 
 defined( '_JEXEC' ) or die( 'Truy cập không hợp lệ' );
+$user   = JFactory::getUser();
 ?>
 <style>
 #main-content-tree{
@@ -25,16 +26,29 @@ table.dataTable thead .sorting_desc {
 <div id="tab_danhsach" role="tabpanel">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-        	<li class="active"> 
+			<?php if (core::_checkPerAction($user->id, 'com_thongke', 'thongke', 'tab_cctsbnn','site')) { ?>
+        	<li> 
             	<a data-toggle="tab" href="#congchuc_tapsu_bonhiemngach">
-              Công chức Tập sự được bổ nhiệm ngạch <span id="sl_cctsbnn"></span></a>
+            				Công chức Tập sự được bổ nhiệm ngạch biên chế<span id="sl_cctsbnn"></span>
+            	</a>
         	</li>
+        	<?php }?>
+        	<?php if (core::_checkPerAction($user->id, 'com_thongke', 'thongke', 'tab_ldhdccvc','site')) { ?>
+        	<li> 
+            	<a data-toggle="tab" href="#ldhd_ccvc">
+            				LĐHĐ chuyển ngạch biên chế<span id="sl_ldhd_ccvc"></span>
+            	</a>
+        	</li>
+        	<?php }?>
 		</ul>
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div class="tab-pane active" id="congchuc_tapsu_bonhiemngach">
-				<div id="cctsbnn"> </div>
-			</div>
+			<?php if (core::_checkPerAction($user->id, 'com_thongke', 'thongke', 'tab_cctsbnn','site')) { ?>
+			<div class="tab-pane" id="congchuc_tapsu_bonhiemngach"></div>
+			<?php }?>
+			<?php if (core::_checkPerAction($user->id, 'com_thongke', 'thongke', 'tab_ldhdccvc','site')) { ?>
+			<div class="tab-pane"  id="ldhd_ccvc"></div>
+			<?php }?>
 		</div>
 </div>
 <div id="div_xemchitiet"></div>
@@ -56,76 +70,129 @@ var date = function(dateObject) {
 
     return date;
 };
+var year = function(dateObject) {
+    var d = new Date(dateObject);
+    var year = d.getFullYear();
+    return year;
+};
 var refresh = function(){
-	jQuery.blockUI();
-	jQuery.ajax({
-		type: 'POST',
-		url: '<?php echo JUri::base(true)?>/index.php?option=com_thongke&view=thongke&format=raw&task=dsach_cctsbnn',
-		data:{donvi_id: donvi_id},
-		success: function(data){
-			var xhtml='<div class="dataTables_wrapper">';
-				xhtml+='<table role="grid" id="tbl_cctsbnn" class="table table-striped table-bordered table-hover dataTable">';
-				xhtml+='<thead><tr>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Họ tên</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Ngày sinh</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Chức vụ</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Phòng</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Ngày tập sự</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Ngày bổ nhiệm vào ngạch</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Ngạch</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Bậc</th>';
-				xhtml+='<th style="vertical-align: middle;" class="center">Hệ số</th>';
-				xhtml+='</tr></thead><tbody>';
-			for(i=0; i<data.length; i++){
-				xhtml+='<tr>';
-				xhtml+='<td><a style="cursor:pointer" idhoso="'+data[i].id+'" class="btn_edit_hoso">'+data[i].e_name+'</a></td>';
-				xhtml+='<td>'+date(data[i].ngaysinh)+'</td>';
-				xhtml+='<td>'+data[i].congtac_chucvu+'</td>';
-				xhtml+='<td>'+data[i].congtac_phong+'</td><td>'+date(data[i].ngaytapsu)+'</td>';
-				xhtml+='<td>'+date(data[i].ngaybonhiemngach)+'</td>';
-				xhtml+='<td>'+data[i].luong_tenngach+'</td><td>'+data[i].luong_bac+'</td>';
-				xhtml+='<td>'+data[i].luong_heso+'</td></tr>';
+	// nhớ bổ sung các check tab tồn tại thì mới ajax
+	if (jQuery('#congchuc_tapsu_bonhiemngach').length>0){
+		jQuery.blockUI();
+		jQuery.ajax({
+			type: 'POST',
+			url: '<?php echo JUri::base(true)?>/index.php?option=com_thongke&view=thongke&format=raw&task=dsach_cctsbnn',
+			data:{donvi_id: donvi_id},
+			success: function(data){
+				var xhtml='<table role="grid" id="tbl_cctsbnn" class="table table-striped table-bordered table-hover dataTable"></table>';
+				jQuery('#congchuc_tapsu_bonhiemngach').html(xhtml);
+				jQuery('#sl_cctsbnn').html(' ('+data.length+')');
+				var table = jQuery('#tbl_cctsbnn').DataTable({
+				"data": data,
+				"oTableTools": {
+					"sSwfPath": "/media/cbcc/js/dataTables-1.10.0/swf/copy_csv_xls_pdf.swf",		
+					"aButtons": [
+									{
+										"sExtends": "xls",
+										"sButtonText": "Excel",
+										"mColumns": [ 0,1,2,3,4,5,6,7,8 ],
+										"sFileName": "Congchuctapsubonhiemngach.xls",
+										"oSelectorOpts": { filter: 'applied'},
+									},
+									{ 	"sExtends":"print",
+										"bShowAll": false
+									},
+										
+								]
+				},
+				"deferRender":true,
+		        "columns": [
+		                    {"title":"Tên","width": "20%", "data": "e_name" , "render": function (data, type, row, meta) {
+		                        return '<a style="cursor:pointer;" class="btn_edit_hoso" idhoso="'+row.id+'">'+data+'</a>';
+		                    }},
+		                    {"title":"Ngày sinh", "data": "ngaysinh", "render": function(data, type, row, meta){
+			                    if (row.danhdaunamsinh == 1) return year(data);
+			                    else return date(data);
+			                 }},
+		                    // chỉnh == null => nhân viên
+		                    {"title":"Chức vụ", "data": "congtac_chucvu" },
+		                    {"title":"Phòng công tác", "data": "congtac_phong" },			                   
+		                    {"title":"Ngày tập sự", "data": "ngaytapsu" },
+		                    {"title":"Ngày bổ nhiệm ngạch", "data": "ngaybonhiemngach" },
+		                    {"title":"Tên ngạch", "data": "luong_tenngach" },
+		                    {"title":"Bậc", "data": "luong_bac" },
+		                    {"title":"Hệ số", "data": "luong_heso" },
+		                ],
+				"bSort": true,
+			   	"columnDefs": [
+						{
+							"targets": [0],
+							"orderable": false
+					}],
+				 "stateSave": true,
+				});
+				jQuery.unblockUI();
 			}
-			xhtml+='</tbody></table></div>';
-			jQuery('#congchuc_tapsu_bonhiemngach').html(xhtml);
-			jQuery('#sl_cctsbnn').html(' ('+data.length+')');
-			var table = jQuery('#tbl_cctsbnn').DataTable({
-				"lengthMenu": [[10, 20, 50, 100,-1], [10, 20, 50, 100, "Tất cả"]],
-				"oLanguage": {
-		       "sUrl": "/media/cbcc/js/dataTables.vietnam.txt"
-			},
-		   	"sDom": "<'dataTables_wrapper'<'clear'><'row-fluid'<'span3'f><'span3'<'pull-right'T>><'span6'p>t<'row-fluid'<'span2'l><'span4'i><'span6'p>>>",
-			"oTableTools": {
-				"sSwfPath": "/media/cbcc/js/dataTables-1.10.0/swf/copy_csv_xls_pdf.swf",		
-				"aButtons": [
-								{
-									"sExtends": "xls",
-									"sButtonText": "Excel",
-									"mColumns": [ 0,1,2,3,4,5,6,7,8 ],
-									"sFileName": "Congchuctapsubonhiemngach.xls",
-									"oSelectorOpts": { filter: 'applied'},
-								},
-								{ 	"sExtends":"print",
-									"bShowAll": false
-								},
-									
-							]
-			},
-			"bSort": true,
-		   	"columnDefs": [{
-		   			"targets": [1,2,3,4,5,6,7,8],
-		   			"orderable": true
-					},
-					{
-						"targets": [0],
-						"orderable": false
-				}],
-			"order": [[ 4, "asc" ]],
-			 "stateSave": true,
-			});
-			jQuery.unblockUI();
-		}
-	});
+		});
+	}
+	if (jQuery('#ldhd_ccvc').length>0){
+		jQuery.blockUI();
+		jQuery.ajax({
+			type: 'POST',
+			url: '<?php echo JUri::base(true)?>/index.php?option=com_thongke&view=thongke&format=raw&task=dsach_ldhd_ccvc',
+			data:{donvi_id: donvi_id},
+			success: function(data){
+				var xhtml='<table role="grid" id="tbl_ldhd_ccvc" class="table table-striped table-bordered table-hover dataTable"></table>';
+				jQuery('#ldhd_ccvc').html(xhtml);
+				jQuery('#sl_ldhd_ccvc').html(' ('+data.length+')');
+				var table = jQuery('#tbl_ldhd_ccvc').DataTable({
+				"data": data,
+				"oTableTools": {
+					"sSwfPath": "/media/cbcc/js/dataTables-1.10.0/swf/copy_csv_xls_pdf.swf",		
+					"aButtons": [
+									{
+										"sExtends": "xls",
+										"sButtonText": "Excel",
+										"mColumns": [ 0,1,2,3,4,5,6,7,8 ],
+										"sFileName": "Laodonghopdong.xls",
+										"oSelectorOpts": { filter: 'applied'},
+									},
+									{ 	"sExtends":"print",
+										"bShowAll": false
+									},
+										
+								]
+				},
+				"deferRender":true,
+		        "columns": [
+		                    {"title":"Tên","width": "20%", "data": "e_name" , "render": function (data, type, row, meta) {
+		                        return '<a style="cursor:pointer;" class="btn_edit_hoso" idhoso="'+row.id+'">'+data+'</a>';
+		                    }},
+		                    {"title":"Ngày sinh", "data": "ngaysinh", "render": function(data, type, row, meta){
+			                    if (row.danhdaunamsinh == 1) return year(data);
+			                    else return date(data);
+			                 }},
+		                    // chỉnh == null => nhân viên
+		                    {"title":"Chức vụ", "data": "congtac_chucvu" },
+		                    {"title":"Phòng công tác", "data": "congtac_phong" },			                   
+		                    {"title":"Ngày tập sự", "data": "ngaytapsu" },
+		                    {"title":"Ngày bổ nhiệm ngạch", "data": "ngaybonhiemngach" },
+		                    {"title":"Tên ngạch", "data": "luong_tenngach" },
+		                    {"title":"Bậc", "data": "luong_bac" },
+		                    {"title":"Hệ số", "data": "luong_heso" },
+		                ],
+				"bSort": true,
+			   	"columnDefs": [
+						{
+							"targets": [0],
+							"orderable": false
+					}],
+				 "stateSave": true,
+				});
+				jQuery.unblockUI();
+			}
+		});
+	}
 }
 jQuery(document).ready(function($){
 	createTreeviewInMenuBar('Cây đơn vị');

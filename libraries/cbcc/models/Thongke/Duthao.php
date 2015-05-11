@@ -52,7 +52,7 @@ class Thongke_Model_Duthao extends JModelLegacy{
 										"AND `hs`.`hoso_trangthai` = '00'
 							 			 AND `d`.`is_nangluonglansau` = 1"
 					);
-		elseif ($type =='dd' || $type == 'bn' || $type == 'bnvnvc' || $type == 'cxnl')
+		elseif ($type =='dd' || $type == 'bn' || $type == 'bnvnvc' || $type == 'cxnl' || $type == 'dttn' || $type == 'dtnn')
 			$data = $this->xuatduthao($idHoso, 
 					"dvcq.name as donvichuquan, hsc.birth_place, hs.luong_bac, hs.luong_heso,
 					 hs.luong_ngaybatdau, hs.chuyenmon_chuyennganh, hs.luong_tenngach, 

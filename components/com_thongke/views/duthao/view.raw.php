@@ -27,6 +27,12 @@ class ThongkeViewDuthao extends JViewLegacy {
 	  		case 'word_duthao_cxnl':
 	  			$this->_cxnl();
 	  			break;
+	  		case 'word_duthao_dttn':
+	  			$this->_dttn();
+	  			break;
+	  		case 'word_duthao_ctnn':
+	  			$this->_ctnn();
+	  			break;
 	  	}
 	  	parent::display($tpl);
 	 }
@@ -97,6 +103,28 @@ class ThongkeViewDuthao extends JViewLegacy {
  		header("Expires : 0");
  		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
  		header ("Content-Disposition: attachment; Filename=duthao_chuyenxepngachluong" . date ( 'dmy' ) . ".doc" );
+	}
+	function _dttn(){
+		$idhoso = JRequest::getVar('idHoso');
+		$model = Core::model('Thongke/Duthao');
+		$data = $model->duthao($idhoso, 'dttn');
+ 		$this->assignRef('data', $data);
+ 		$this->setLayout('duthao_dttn');
+ 		header("Content-type: application/vnd.ms-word");
+ 		header("Expires : 0");
+ 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+ 		header ("Content-Disposition: attachment; Filename=duthao_daotaotrongnuoc" . date ( 'dmy' ) . ".doc" );
+	}
+	function _ctnn(){
+		$idhoso = JRequest::getVar('idHoso');
+		$model = Core::model('Thongke/Duthao');
+		$data = $model->duthao($idhoso, 'ctnn');
+ 		$this->assignRef('data', $data);
+ 		$this->setLayout('duthao_ctnn');
+ 		header("Content-type: application/vnd.ms-word");
+ 		header("Expires : 0");
+ 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+ 		header ("Content-Disposition: attachment; Filename=duthao_congtacnuocngoai" . date ( 'dmy' ) . ".doc" );
 	}
 }
 ?>

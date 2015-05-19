@@ -46,8 +46,8 @@ class TochucViewSearch extends JViewLegacy
     	$goibienche	=	$model->getCbo('bc_goibienche ', 'id, name', ' active=1','id asc', '--Chọn tất cả--', 'id', 'name', null, 'goibienche', 'chosen');
     	$goidaotao			=	$model->getCbo('cb_goidaotaoboiduong ', 'id, name', ' status=1','id asc', '--Chọn tất cả--', 'id', 'name', null, 'goidaotaoboiduong', 'chosen');
     	$goihinhthuchuongluong		=	$model->getCbo('cb_goihinhthuchuongluong ', 'id, name', ' status=1','id asc', '--Chọn tất cả--', 'id', 'name', null, 'goihinhthuchuongluong', 'chosen');
-    	$goiluong		=	$model->getCbo('cb_goiluong ', 'id,CONCAT(IF(level=1,"--", IF(level=2,"----","")), name) as name', ' level!=0 AND status=1','lft asc', '--Chọn tất cả--', 'id', 'name', null, 'goiluong', 'chosen');
-    	$goichucvu	=	$model->getCbo('cb_goichucvu ', 'id, CONCAT(IF(level=1,"--", IF(level=2,"----",IF(level=3,"------",IF(level=4,"--------",IF(level=5,"----------",IF(level=6,"------------",IF(level=7,"--------------",IF(level=8,"----------------","")))))))), name) as name', ' level!=0 AND status=1','lft asc', '--Chọn tất cả--', 'id', 'name', null, 'goichucvu', 'chosen');
+    	$goiluong		=	$model->getCbo('cb_goiluong ', 'id,CONCAT(REPEAT("--", level), name) as name', ' level!=0 AND status=1','lft asc', '--Chọn tất cả--', 'id', 'name', null, 'goiluong', 'chosen');
+    	$goichucvu	=	$model->getCbo('cb_goichucvu ', 'id, CONCAT( REPEAT ("--", level), name) as name', ' level!=0 AND status=1','lft asc', '--Chọn tất cả--', 'id', 'name', null, 'goichucvu', 'chosen');
     	$linhvuc	=	$model->getThongtin('id,name,level','cb_type_linhvuc',null, array('type=2'), 'lft asc');
     	// Lịch sử
     	$cachthuc_id	=	$model->getCbo('ins_dept_cachthuc ', 'id, name', null  ,'id asc', '--Chọn tất cả--', 'id', 'name', null, 'cachthuc_id', 'chosen');

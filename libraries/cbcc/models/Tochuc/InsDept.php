@@ -128,7 +128,7 @@ class Tochuc_Model_InsDept{
 		    $query->where('a.ins_loaihinh = '.$db->quote($formData['ins_loaihinh']));
 		}
 		if (isset($formData['name'])) {
-			$query->where('a.name LIKE ('.$db->quote('%'.$formData['name'].'%').')');
+			$query->where('a.name LIKE BINARY('.$db->quote('%'.$formData['name'].'%').')');
 		}
 		if (isset($formData['s_name'])) {
 			$query->where('a.s_name LIKE ('.$db->quote('%'.$formData['s_name'].'%').')');

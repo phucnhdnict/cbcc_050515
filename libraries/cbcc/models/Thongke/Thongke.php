@@ -23,7 +23,7 @@ class Thongke_Model_Thongke extends JModelLegacy{
 		return $db->loadObjectList();
 	}
 	
-	public function getCCtsbnn($donvi_id, $hinhthuc, $bienche_id){
+	public function getDanhsach($donvi_id, $hinhthuc, $bienche_id){
 	$str_bienche_id = implode(',', $bienche_id);
 	$db = JFactory::getDbo();
 	$query = $db->getQuery(true);

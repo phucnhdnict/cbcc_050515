@@ -322,6 +322,8 @@ jQuery('body').delegate('.btn_view_thongtin','click',function(){
 			success:function(data){
 					jQuery('#thongtin').html(data);
 					jQuery('.widget-toolbar').append('<button style="margin-top:0px;" class="btn_back btn btn-small btn-info">← Quay về</button>');
+					jQuery('#div_sapxep').hide();
+					jQuery('#div_thaotac').hide();
 					jQuery('#frmTochucSearch').hide();
 					jQuery.unblockUI();
 			}

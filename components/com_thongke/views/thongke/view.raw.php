@@ -23,7 +23,7 @@ class ThongkeViewThongke extends JViewLegacy {
  		$model	=	Core::model('Thongke/Thongke');
  		$donvi_id 	=	$_POST['donvi_id'];
  		$ketqua = array();
-		$kq=$model->getCCtsbnn($donvi_id,Core::config('cbcc/bienche/tapsu'), array('3','2','25'));
+		$kq=$model->getDanhsach($donvi_id,Core::config('cbcc/bienche/tapsu'), array('3','2','25'));
 		Core::PrintJson($kq);
  		die;
  	}
@@ -31,7 +31,7 @@ class ThongkeViewThongke extends JViewLegacy {
  		$model	=	Core::model('Thongke/Thongke');
  		$donvi_id 	=	$_POST['donvi_id'];
  		$ketqua = array();
-		$kq=$model->getCCtsbnn($donvi_id,'select id from bc_hinhthuc where is_hopdong = 1', array('3','2','25'));
+		$kq=$model->getDanhsach($donvi_id,'select id from bc_hinhthuc where is_hopdong = 1', array('3','2','25'));
 		Core::PrintJson($kq);
  		die;
  	}
